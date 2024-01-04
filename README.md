@@ -11,16 +11,25 @@ the `*coinpayments.Config` struct, consisting of your private and public keys, a
   
 This looks like:
 ``` go
-clientConfig := &coinpayments.Config{
-  PublicKey: "yourpublickey",
-  PrivateKey: "yourprivatekey",
-}
-httpClient := &http.Client{
-  Timeout: 10 * time.Second,
-}
-client, err := coinpayments.NewClient(clientConfig, httpClient)
-if err != nil {
-  // handle error...
+import (
+  "github.com/tryvium-travels/go-coinpayments"
+)
+
+func main() {
+  clientConfig := &coinpayments.Config{
+    PublicKey: "your-public-key",
+    PrivateKey: "your-private-key",
+  }
+  httpClient := &http.Client{
+    Timeout: 10 * time.Second,
+  }
+
+  client, err := coinpayments.NewClient(clientConfig, httpClient)
+  if err != nil {
+    // handle error...
+  }
+
+  // ...
 }
 ```
   
@@ -28,16 +37,29 @@ Once instantiated, you can use the client to make API calls. Each call has their
 
 An example of the `create_transaction` command being called:
 ``` go
-resp, err := client.CallCreateTransaction(
-  &coinpayments.TransactionRequest{
-    Amount: "1", // the amount is the value of the fiat currency you wish to receive
-    Currency1: "USD", // currency that amount is specified in (USD, CAD, JPY, etc)
-    Currency2: "BTC", // currency in crypto that you wish to receive (BTC, ETC, LTC, etc)
-    BuyerEmail: "test@email.com", // our client requires the buyer email address
-  }
+import (
+  "github.com/tryvium-travels/go-coinpayments"
 )
-if err != nil {
-  // handle error...
+
+func main() {
+  clientConfig := ...
+  httpClient := ...
+  client, err := coinpayments.NewClient(clientConfig, httpClient)
+  if err != nil {
+    // handle error...
+  }
+
+  resp, err := client.CallCreateTransaction(
+    &coinpayments.TransactionRequest{
+      Amount: "1", // the amount is the value of the fiat currency you wish to receive
+      Currency1: "USD", // currency that amount is specified in (USD, CAD, JPY, etc)
+      Currency2: "BTC", // currency in crypto that you wish to receive (BTC, ETC, LTC, etc)
+      BuyerEmail: "test@email.com", // our client requires the buyer email address
+    }
+  )
+  if err != nil {
+    // handle error...
+  }
 }
 ```
 
@@ -50,19 +72,38 @@ command from the coinpayments package, ie, `coinpayments.CmdCreateTransaction`.
 Here is an example of getting the deposit address:  
 
 ``` go
-var data url.Values
-data.Add("currency", "USD")
+import (
+  "net/url"
 
-var resp coinpayments.DepositAddressResponse
-err := c.Call(coinpayments.CmdGetDepositAddress, data, &resp)
+  "github.com/tryvium-travels/go-coinpayments"
+)
+
+func main() {
+  clientConfig := ...
+  httpClient := ...
+  client, err := coinpayments.NewClient(clientConfig, httpClient)
+  if err != nil {
+    // handle error...
+  }
+
+  var data url.Values
+  data.Add("currency", "USD")
+
+  var resp coinpayments.DepositAddressResponse
+  err := c.Call(coinpayments.CmdGetDepositAddress, data, &resp)
+  if err != nil {
+    // handle error...
+  }
+}
 ```
 
 # Testing the library
 
-You need to export two environment variables for the tests to run - your public key, and private key.  
+You need to export two environment variables for the tests to run - your public key, and private key.
+
 ``` bash
-export COINPAYMENTS_PUBLIC_KEY=yourpublickeyhere
-export COINPAYMENTS_PRIVATE_KEY=yourprivatekeyhere
+export COINPAYMENTS_PUBLIC_KEY="your-public-key-here"
+export COINPAYMENTS_PRIVATE_KEY="your-private-key-here"
 
 go test ./...
 ```
@@ -70,7 +111,7 @@ go test ./...
 If you want to run the PBN Tag tests and have purchased a PBN Tag, you can also export it, and those tests will run. Otherwise, they will be ignored.
 
 ``` bash
-export COINPAYMENTS_PBN_TAG=yourpbntaghere
+export COINPAYMENTS_PBN_TAG="your-pbn-tag-here"
 ```
 
 # How to contribute
