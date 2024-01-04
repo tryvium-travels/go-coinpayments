@@ -15,8 +15,8 @@ type WithdrawalRequest struct {
 
 // WithdrawalResult is a result from the API for a Withdrawal command
 type WithdrawalResult struct {
-	Amount         string `json:"amount"`
-	ID string `json:"id"`
+	Amount string `json:"amount"`
+	ID     string `json:"id"`
 	Status int `json:"status"` // 0 or 1. 0 = transfer created, waiting for email conf. 1 = transfer created with no email conf. 
 }
 
