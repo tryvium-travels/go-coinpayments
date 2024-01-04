@@ -16,7 +16,6 @@ func TestCallGetBasicInfo(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Could not call get basic info: %s", err.Error())
 	}
-
 }
 
 func TestCallRates(t *testing.T) {
@@ -26,9 +25,7 @@ func TestCallRates(t *testing.T) {
 	}
 
 	_, err = client.CallRates(&coinpayments.RatesRequest{Short: "1", Accepted: "0"})
-
 	if err != nil {
 		t.Fatalf("Could not call get basic info: %s", err.Error())
 	}
-
 }

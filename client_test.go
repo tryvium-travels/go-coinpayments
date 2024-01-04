@@ -22,8 +22,8 @@ func testClient() (*coinpayments.Client, error) {
 	}
 
 	return coinpayments.NewClient(&coinpayments.Config{PublicKey: pubKey, PrivateKey: privateKey}, &http.Client{})
-
 }
+
 func TestNewClient(t *testing.T) {
 	if _, err := coinpayments.NewClient(&coinpayments.Config{PublicKey: "", PrivateKey: ""}, &http.Client{}); err == nil {
 		t.Fatalf("Should have thrown an error with emptu public and private key, but it didn't")
@@ -44,10 +44,9 @@ func TestCall(t *testing.T) {
 		t.Fatalf("Should have instantiated a new client with valid config and http client, but it threw error: %s", err.Error())
 	}
 
-	failCommand := "doesntexist"
+	failCommand := "invalid-command"
 	var txResponse coinpayments.TransactionResponse
 	if err := client.Call(failCommand, url.Values{}, &txResponse); err == nil {
 		t.Fatalf("Should have failed with non-supported command of %s", failCommand)
 	}
-
 }
